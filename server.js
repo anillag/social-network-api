@@ -13,8 +13,6 @@ mongoose.connect(
   }
 );
 
-mongoose.set("debug", process.env.NODE_ENV !== "production");
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
