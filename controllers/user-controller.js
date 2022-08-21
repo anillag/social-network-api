@@ -11,9 +11,9 @@ const userController = {
       });
   },
   getSingleUser: (req, res) => {
-    const userId = req.params.id;
-    User.findOne({ _id: userId })
+    User.findOne({ _id: req.params.userId })
       .populate("friends")
+      // .populate("thoughts")
       .select("-__v")
       .then((data) => {
         if (!data) {
@@ -41,7 +41,7 @@ const userController = {
       });
   },
   updateUser: (req, res) => {
-    User.findOneAndUpdate({ _id: req.params.id }, req.body, {
+    User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
       new: true,
       runValidators: true,
     })
@@ -57,13 +57,51 @@ const userController = {
       });
   },
   deleteUser: (req, res) => {
-    User.findOneAndDelete({ _id: req.params.id }).then((data) => {
+    User.findOneAndDelete({ _id: req.params.userId }).then((data) => {
       if (!data) {
         return res.status(404).json({ message: "User not found" });
       }
-      // TODO: Remove the user's `thoughts` records
-      return res.sendStatus(204);
+      // return Thought.deleteMany({ _id: { $in: data.thoughts } });
+      return res.json({ message: "Deleted user" });
     });
+  },
+  addFriend: (req, res) => {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $push: { friends: req.params.friendId } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
+      .then((data) => {
+        if (!data) {
+          res.status(404).json({ message: "User not found" });
+        }
+        res.json(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        return res.sendStatus(500);
+      });
+  },
+  // TODO:  not working
+  deleteFriend: (req, res) => {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: { friendId: req.params.friendId } } },
+      { new: true }
+    )
+      .then((data) => {
+        if (!data) {
+          res.status(404).json({ message: "User not found" });
+        }
+        res.json(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        return res.sendStatus(500);
+      });
   },
 };
 

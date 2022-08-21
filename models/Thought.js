@@ -20,6 +20,7 @@ const reactionSchema = new Schema({
     get: (createdAtVal) => dateFormat(createdAtVal),
   },
 });
+
 const thoughtSchema = new Schema(
   {
     thoughtText: {
