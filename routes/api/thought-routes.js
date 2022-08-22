@@ -10,12 +10,12 @@ const {
 } = require("../../controllers/thought-controller");
 
 // Route root:  /api/thoughts
-// router.get("/", getAllThoughts);
-// router.get("/:id", getSingleThought);
-// router.post("/", createThought);
-// router.put("/:id", updateThought);
-// router.delete("/:id", deleteThought);
-// router.post("/:thoughtId/reactions", createReaction);
-// router.delete("/:thoughtId/reactions/:reactionId", deleteReaction);
+router.get("/", getAllThoughts);
+router.get("/:thoughtId", getSingleThought);
+router.post("/", createThought);
+router.put("/:thoughtId", updateThought);
+router.delete("/:thoughtId", deleteThought);
+router.post("/:thoughtId/reactions", createReaction);
+router.delete("/:thoughtId/reactions/:reactionId", deleteReaction);
 
 module.exports = router;

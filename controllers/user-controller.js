@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Thought } = require("../models");
 
 const userController = {
   getAllUsers: (req, res) => {
@@ -13,7 +13,7 @@ const userController = {
   getSingleUser: (req, res) => {
     User.findOne({ _id: req.params.userId })
       .populate("friends")
-      // .populate("thoughts")
+      .populate("thoughts")
       .select("-__v")
       .then((data) => {
         if (!data) {
@@ -61,8 +61,7 @@ const userController = {
       if (!data) {
         return res.status(404).json({ message: "User not found" });
       }
-      // return Thought.deleteMany({ _id: { $in: data.thoughts } });
-      return res.json({ message: "Deleted user" });
+      return Thought.deleteMany({ _id: { $in: data.thoughts } });
     });
   },
   addFriend: (req, res) => {
@@ -85,16 +84,15 @@ const userController = {
         return res.sendStatus(500);
       });
   },
-  // TODO:  not working
   deleteFriend: (req, res) => {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { friends: { friendId: req.params.friendId } } },
+      { $pull: { friends: req.params.friendId } },
       { new: true }
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "User not found" });
+          res.status(404).json({ message: "User not found1" });
         }
         res.json(data);
       })
