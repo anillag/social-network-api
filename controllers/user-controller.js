@@ -92,7 +92,7 @@ const userController = {
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "User not found1" });
+          res.status(404).json({ message: "User not found" });
         }
         res.json(data);
       })
